@@ -1,4 +1,4 @@
-<h1 align="center">MehmetOS</h1>
+<h1 align="center">OpenShell</h1>
 
 <p align="center">
   <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux logo" width="120">
@@ -7,7 +7,7 @@
 <h2 align="center">Browser-Based GNU/Linux Terminal Simulation</h2>
 
 <p align="center">
-  MehmetOS is a web-based project that simulates a GNU/Linux environment directly in your browser.
+  OpenShell is a web-based project that simulates a GNU/Linux environment directly in your browser.
 </p>
 
 <p align="center">
@@ -27,6 +27,6 @@
 </p>
 
 <p align="center">
-  MehmetOS can be hosted on any static web server and is intended for educational purposes or as a lightweight Linux demo.
+  OpenShell can be hosted on any static web server and is intended for educational purposes or as a lightweight Linux demo.
 </p></p>
 
