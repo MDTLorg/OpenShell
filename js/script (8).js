@@ -2,14 +2,14 @@
     const terminal = document.getElementById("terminal");
     const bootTime = Date.now();
 
-    let users = JSON.parse(localStorage.getItem('mehmetos_users')) || {
+    let users = JSON.parse(localStorage.getItem('openshell_users')) || {
         "root": { password: "root", home: "/root" },
-        "mehmet": { password: "1234", home: "/home/user" }
+        "user": { password: "1234", home: "/home/user" }
     };
     let currentUser = "mehmet";
-    let systemHostname = localStorage.getItem('mehmetos_hostname') || "mhtos";
+    let systemHostname = localStorage.getItem('openshell_hostname') || "openshell";
 
-    let vfs = JSON.parse(localStorage.getItem('mehmetos_vfs'));
+    let vfs = JSON.parse(localStorage.getItem('openshell_vfs'));
     if (!vfs) {
         vfs = {
             type: "dir",
@@ -26,7 +26,7 @@
                             content: {
                                 "Documents": { type: "dir", content: {} },
                                 "Downloads": { type: "dir", content: {} },
-                                "readme.txt": { type: "file", content: "MehmetOS'a hos geldin! Bu dosya localStorage ile kaydedildi." }
+                                "readme.txt": { type: "file", content: "OpenShell'a hos geldin! Bu dosya localStorage ile kaydedildi." }
                             }
                         }
                     }
@@ -49,29 +49,29 @@
     }
     
     let currentPath = ["home", "user"];
-    let filePermissions = JSON.parse(localStorage.getItem('mehmetos_perms')) || {};
+    let filePermissions = JSON.parse(localStorage.getItem('openshell_perms')) || {};
     let commandHistory = [];
     let historyIndex = -1;
-    let aliases = JSON.parse(localStorage.getItem('mehmetos_aliases')) || {};
+    let aliases = JSON.parse(localStorage.getItem('openshell_aliases')) || {};
 
     function saveVFS() {
-        localStorage.setItem('mehmetos_vfs', JSON.stringify(vfs));
+        localStorage.setItem('openshell_vfs', JSON.stringify(vfs));
     }
 
     function saveUsers() {
-        localStorage.setItem('mehmetos_users', JSON.stringify(users));
+        localStorage.setItem('openshell_users', JSON.stringify(users));
     }
 
     function saveAliases() {
-        localStorage.setItem('mehmetos_aliases', JSON.stringify(aliases));
+        localStorage.setItem('openshell_aliases', JSON.stringify(aliases));
     }
 
     function savePermissions() {
-        localStorage.setItem('mehmetos_perms', JSON.stringify(filePermissions));
+        localStorage.setItem('openshell_perms', JSON.stringify(filePermissions));
     }
 
     function saveHostname() {
-        localStorage.setItem('mehmetos_hostname', systemHostname);
+        localStorage.setItem('openshell_hostname', systemHostname);
     }
 
     function escapeHtml(text) {
@@ -107,12 +107,12 @@
 
     function getPermissions(pathArr) {
         let key = pathArr.join('/');
-        return filePermissions[key] || { mode: '755', owner: 'mehmet', group: 'mehmet' };
+        return filePermissions[key] || { mode: '755', owner: 'user', group: 'user' };
     }
 
     function setPermissions(pathArr, mode, owner, group) {
         let key = pathArr.join('/');
-        filePermissions[key] = { mode: mode, owner: owner || 'mehmet', group: group || 'mehmet' };
+        filePermissions[key] = { mode: mode, owner: owner || 'user', group: group || 'user' };
         savePermissions();
     }
 
@@ -139,8 +139,8 @@ const grubScreen = `
 <div id="grub">
     <div style="text-align:center; color: #8ae234; font-size: 18px; margin-bottom: 12px;">GNU GRUB version 2.12</div>
     <div style="background-color: #1a1a1a; padding: 8px; border-radius: 8px;">
-        <div class="grub-highlight" style="margin: 2px 0; cursor: pointer;" id="boot-normal"> *MehmetOS GNU/Linux</div>
-        <div style="margin: 2px 0; color: #aaa; cursor: pointer;" id="boot-safe">  MehmetOS GNU/Linux (Safe Mode)</div>
+        <div class="grub-highlight" style="margin: 2px 0; cursor: pointer;" id="boot-normal"> *OpenShell GNU/Linux</div>
+        <div style="margin: 2px 0; color: #aaa; cursor: pointer;" id="boot-safe">  OpenShell GNU/Linux (Safe Mode)</div>
     </div>
     ...
 `;
@@ -150,7 +150,7 @@ const grubScreen = `
         "Loading MehmetOS GNU/Linux...",
         "Loading initial ramdisk...",
         "",
-        "[    0.000000] Linux version 6.18-mehmetos",
+        "[    0.000000] Linux version 6.18-openshell",
         "[    0.015201] x86/fpu: Supporting XSAVE feature",
         "[    0.022188] BIOS-provided physical RAM map:",
         "[    0.038112] Reserving Intel graphics memory",
@@ -191,7 +191,7 @@ const grubScreen = `
 "[    0.522891] init: Starting systemd 257",
 "[    0.540112] systemd[1]: systemd 257 running in system mode",
 "[    0.557334] systemd[1]: Detected architecture x86-64",
-"[    0.574556] systemd[1]: Set hostname to <mehmetos>",
+"[    0.574556] systemd[1]: Set hostname to <openshell>",
 "[    0.591778] systemd[1]: Initializing machine ID",
 "[    0.608999] systemd[1]: Starting udev Kernel Device Manager",
 "[    0.626221] systemd[1]: Started udev Kernel Device Manager",
@@ -241,7 +241,7 @@ const grubScreen = `
 "[    1.498334] ACPI: Power Resource [CPU2] (on)",
 "[    1.515667] ACPI: Power Resource [CPU3] (on)",
         "",
-        "MehmetOS GNU/Linux login"
+        "OpenShell GNU/Linux login"
     ];
 
     let logIndex = 0;
@@ -334,10 +334,10 @@ document.getElementById("boot-safe").onclick = function() {
 }
 
 function startTerminal() {
-    print("<br>Welcome to MehmetOS GNU/Linux!", true);
+    print("<br>Welcome to OpenShell GNU/Linux!", true);
     print("Type 'help' for a list of available commands.<br>", true);
-    print("The technical maintenance, updates, and sustainability processes of this website are managed partially or fully by @DigitalShadows659 and @mehmetos via GitHub.<br>", true);
-    print("Bu web sitesinin teknik bakım, güncelleme ve sürdürülebilirlik süreçleri, GitHub üzerinden @DigitalShadows659 ve @mehmetos tarafından kısmi veya tam yetkiyle yürütülmektedir.<br>",  true);
+    print("The technical maintenance, updates, and sustainability processes of this website are managed partially or fully by @DigitalShadows659 via GitHub.<br>", true);
+    print("Bu web sitesinin teknik bakım, güncelleme ve sürdürülebilirlik süreçleri, GitHub üzerinden @DigitalShadows659 ve tarafından kısmi veya tam yetkiyle yürütülmektedir.<br>",  true);
     newInput();
 }
 
@@ -1076,11 +1076,11 @@ medit(args) {
 
         uname(args) {
             if (args[1] === '-r') {
-                print("6.18-mehmetos");
+                print("6.18-openshell");
             } else if (args[1] === '-n') {
                 print(systemHostname);
             } else if (args[1] === '-a') {
-                print(`Linux ${systemHostname} 6.18-mehmetos #1 SMP PREEMPT_DYNAMIC Sat Jun 19 12:34:56 UTC 2026 x86_64 GNU/Linux`);
+                print(`Linux ${systemHostname} 6.18-openshell #1 SMP PREEMPT_DYNAMIC Sat Jun 19 12:34:56 UTC 2026 x86_64 GNU/Linux`);
             } else {
                 print("Linux");
             }
@@ -1092,18 +1092,18 @@ medit(args) {
             let fetchArt = `
 <div style="display: flex; gap: 20px;">
 <div style="color: #8ae234;">
-███╗   ███╗███████╗██╗  ██╗
-████╗ ████║██╔════╝██║  ██║
-██╔████╔██║█████╗  ███████║
-██║╚██╔╝██║██╔══╝  ██╔══██║
-██║ ╚═╝ ██║███████╗██║  ██║
-╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝
+░██████╗██████╗ ███████╗███╗   ██╗███████╗██╗  ██╗███████╗██╗     ██╗     
+██╔════╝██╔══██╗██╔════╝████╗  ██║██╔════╝██║  ██║██╔════╝██║     ██║     
+██║     ██████╔╝█████╗  ██╔██╗ ██║███████╗███████║█████╗  ██║     ██║     
+██║     ██╔═══╝ ██╔══╝  ██║╚██╗██║╚════██║██╔══██║██╔══╝  ██║     ██║     
+╚██████╗██║     ███████╗██║ ╚████║███████║██║  ██║███████╗███████╗███████╗
+ ╚═════╝╚═╝     ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
 </div>
 <div>
 <span class="user">${currentUser}@${systemHostname}</span>
 -------------------
-<span class="user">OS</span>: MehmetOS GNU/Linux
-<span class="user">Kernel</span>: 6.18-mehmetos
+<span class="user">OS</span>: OpenShell GNU/Linux
+<span class="user">Kernel</span>: 6.18-openshell
 <span class="user">Uptime</span>: ${getUptime()}
 <span class="user">Shell</span>: bash
 <span class="user">CPU</span>: ${cores} Cores
