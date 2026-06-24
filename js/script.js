@@ -1138,7 +1138,7 @@ medit(args) {
         }
     }; // commands objesi burada temiz bir sekilde kapandi
 
-    function runCommand(rawValue) {
+        function runCommand(rawValue) {
         if (rawValue.trim() === "") {
             newInput();
             return;
@@ -1146,15 +1146,19 @@ medit(args) {
 
         let pipelineParts = rawValue.split('|');
         let currentInputData = "";
+        let isDataHtml = false; 
 
         for (let i = 0; i < pipelineParts.length; i++) {
             let cmdPart = pipelineParts[i].trim();
             if (cmdPart === "") continue;
 
             let outputBuffer = "";
+            let bufferIsHtml = false; 
+            
             let originalPrint = print;
             print = function(text, isHtml = false) {
                 outputBuffer += text + "\n";
+                if (isHtml) bufferIsHtml = true;
             };
 
             let args = cmdPart.split(/\s+/);
@@ -1163,51 +1167,7 @@ medit(args) {
             let isLastStep = (i === pipelineParts.length - 1);
 
             if (isLastStep && (cmdPart.includes('>') || cmdPart.includes('>>'))) {
-                print = originalPrint;
                 
-                let isAppend = cmdPart.includes('>>');
-                let redirectSplit = isAppend ? cmdPart.split('>>') : cmdPart.split('>');
-                
-                let actualCmdPart = redirectSplit[0].trim();
-                let filename = redirectSplit[1].trim();
-                
-                let actualArgs = actualCmdPart.split(/\s+/);
-                let actualCmdName = actualArgs[0];
-                
-                let fileOutputBuffer = "";
-                print = function(text) {
-                    fileOutputBuffer += text + "\n";
-                };
-
-                let cmdFunc = commands[actualCmdName];
-                if (cmdFunc) {
-                    cmdFunc(actualArgs, currentInputData);
-                } else {
-                    originalPrint(`bash: ${actualCmdName}: command not found`);
-                    print = originalPrint;
-                    newInput();
-                    return;
-                }
-
-                print = originalPrint;
-                
-                let targetPath = resolvePath(filename);
-                let parentNode = getNode(targetPath.slice(0, -1));
-                let targetName = targetPath[targetPath.length - 1];
-
-                if (parentNode && parentNode.type === 'dir') {
-                    if (isAppend && parentNode.content[targetName] && parentNode.content[targetName].type === 'file') {
-                        parentNode.content[targetName].content += fileOutputBuffer;
-                    } else {
-                        parentNode.content[targetName] = { type: "file", content: fileOutputBuffer };
-                    }
-                    saveVFS();
-                } else {
-                    print(`bash: ${filename}: No such file or directory`);
-                }
-                
-                currentInputData = "";
-                continue;
             }
 
             let cmdFunc = commands[cmdName];
@@ -1222,13 +1182,14 @@ medit(args) {
 
             print = originalPrint;
             currentInputData = outputBuffer;
+            isDataHtml = bufferIsHtml;
         }
 
         if (currentInputData.trim() !== "") {
-            print(currentInputData.trim());
+
+            print(currentInputData.trim(), isDataHtml); 
         }
 
         newInput();
-    }
-
-    init();
+        }
+init();
