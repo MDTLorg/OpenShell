@@ -6,7 +6,7 @@
         "root": { password: "root", home: "/root" },
         "user": { password: "1234", home: "/home/user" }
     };
-    let currentUser = "mehmet";
+    let currentUser = "user";
     let systemHostname = localStorage.getItem('openshell_hostname') || "openshell";
 
     let vfs = JSON.parse(localStorage.getItem('openshell_vfs'));
@@ -147,7 +147,7 @@ const grubScreen = `
 
 
     const bootLogs = [
-        "Loading MehmetOS GNU/Linux...",
+        "Loading OpenShell GNU/Linux...",
         "Loading initial ramdisk...",
         "",
         "[    0.000000] Linux version 6.18-openshell",
